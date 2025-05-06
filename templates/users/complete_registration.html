@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}完成註冊 - 協作白板{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card complete-reg-card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title text-center"><i class="fas fa-clipboard-check me-2"></i>完成註冊流程</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>在您開始使用我們的協作白板功能前，請確認您已閱讀並同意我們的使用條款。
+                </div>
+                
+                <h4 class="mt-4 mb-3"><i class="fas fa-gavel me-2"></i>服務條款</h4>
+                <div class="terms-container">
+                    <h5>1. 帳號使用</h5>
+                    <p>您必須負責保管您的帳號密碼安全，並對使用您帳號進行的所有活動負責。</p>
+                    
+                    <h5>2. 使用限制</h5>
+                    <p>您同意不會上傳、分享或發布任何違法、侵權、有害或不當的內容。</p>
+                    
+                    <h5>3. 隱私政策</h5>
+                    <p>我們尊重您的隱私，只會依據我們的隱私政策收集和使用您的個人資訊。</p>
+                    
+                    <h5>4. 內容所有權</h5>
+                    <p>您保留您創建內容的所有權，但授予我們使用、儲存和顯示您內容的權利，以提供服務。</p>
+                    
+                    <h5>5. 服務變更</h5>
+                    <p>我們保留在任何時候修改或終止服務的權利，恕不另行通知。</p>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-check mb-4">
+                        <input type="checkbox" class="form-check-input" id="agree" required>
+                        <label class="form-check-label" for="agree">
+                            <i class="fas fa-check text-success me-2"></i>我已閱讀並同意上述條款
+                        </label>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="fas fa-user-check me-2"></i>完成註冊
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

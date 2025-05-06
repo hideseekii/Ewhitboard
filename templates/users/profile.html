@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}個人資料 - 協作白板{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 profile-section">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title"><i class="fas fa-user-circle me-2"></i>{{ user.username }} 的個人資料</h3>
+            </div>
+            <div class="card-body text-center">
+                {% if user.profile.avatar %}
+                    <img class="rounded-circle profile-img mb-3" width="150" height="150" src="{{ user.profile.avatar.url }}" alt="Profile Picture">
+                {% else %}
+                    <img class="rounded-circle profile-img mb-3" width="150" height="150" src="{% static 'img/default-avatar.png' %}" alt="Default Profile Picture">
+                {% endif %}
+                <h4 class="profile-info">{{ user.username }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+                
+                {% if user.profile.bio %}
+                    <div class="profile-bio">
+                        <h5><i class="fas fa-quote-left me-2 text-primary"></i>關於我</h5>
+                        <p>{{ user.profile.bio }}</p>
+                    </div>
+                {% endif %}
+                
+                {% if not is_registered %}
+                    <div class="alert alert-warning mt-3">
+                        <p><i class="fas fa-exclamation-triangle me-2"></i>您尚未完成註冊流程，無法參與專案。</p>
+                        <a href="{% url 'users:complete_registration' %}" class="btn btn-warning btn-sm mt-2">
+                            <i class="fas fa-user-check me-2"></i>完成註冊
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success mt-3">
+                        <span class="badge-registered mb-2"><i class="fas fa-check-circle me-2"></i>已完成註冊</span>
+                        <p class="mb-0">您已完成註冊，可以參與專案。</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if is_registered %}
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title"><i class="fas fa-chart-pie me-2"></i>活動統計</h3>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4>{{ user.owned_projects.count }}</h4>
+                        <p class="text-muted">我的專案</p>
+                    </div>
+                    <div class="col-6">
+                        <h4>{{ user.projects.count }}</h4>
+                        <p class="text-muted">協作專案</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card profile-form">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title"><i class="fas fa-edit me-2"></i>編輯個人資料</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend>帳號資訊</legend>
+                        {{ u_form.as_p }}
+                    </fieldset>
+                    
+                    <fieldset class="form-group mt-4">
+                        <legend>個人檔案</legend>
+                        {{ p_form.as_p }}
+                    </fieldset>
+                    
+                    <div class="form-group text-center mt-4">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-save me-2"></i>更新資料
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

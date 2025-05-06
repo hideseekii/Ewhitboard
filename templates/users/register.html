@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}註冊 - 協作白板{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card register-form">
+            <div class="card-header">
+                <h2 class="card-title text-center">註冊新帳號</h2>
+                <p class="text-center text-muted">加入我們的協作白板平台</p>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {{ form.as_p }}
+                    </fieldset>
+                    <div class="form-group text-center">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-user-plus me-2"></i>註冊
+                        </button>
+                    </div>
+                </form>
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        已有帳號? <a class="ms-2" href="{% url 'users:login' %}">登入</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-info-circle me-2"></i>為什麼要加入我們？</h5>
+                <ul class="mb-0">
+                    <li>與團隊成員即時協作</li>
+                    <li>使用多種工具表達想法</li>
+                    <li>輕鬆儲存和分享您的創作</li>
+                    <li>支援多種設備和瀏覽器</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

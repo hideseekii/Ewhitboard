@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}首頁 - 協作白板{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="display-4">歡迎使用協作白板！</h1>
+            <p class="lead">這是一個多人協作的白板平台，讓您能夠和團隊成員一起即時協作、共同創造與思考。</p>
+            <hr class="my-4">
+            
+            {% if user.is_authenticated %}
+                {% if user.profile.is_registered %}
+                    <p>您已經完成註冊流程，可以開始使用所有功能。</p>
+                    <div class="mt-4">
+                        <a class="btn btn-primary btn-lg" href="#">
+                            <i class="fas fa-project-diagram me-2"></i>我的專案
+                        </a>
+                        <a class="btn btn-outline-primary btn-lg ms-2" href="#">
+                            <i class="fas fa-plus-circle me-2"></i>新增專案
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <p>您尚未完成註冊流程，請完成註冊以使用所有功能。</p>
+                        <a class="btn btn-warning btn-lg pulse mt-2" href="{% url 'users:complete_registration' %}">
+                            <i class="fas fa-user-check me-2"></i>完成註冊
+                        </a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p>立即註冊或登入以開始使用我們的協作平台</p>
+                <div class="mt-4">
+                    <a class="btn btn-primary btn-lg" href="{% url 'users:register' %}">
+                        <i class="fas fa-user-plus me-2"></i>註冊
+                    </a>
+                    <a class="btn btn-outline-primary btn-lg ms-2" href="{% url 'users:login' %}">
+                        <i class="fas fa-sign-in-alt me-2"></i>登入
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-4 d-none d-lg-block text-center">
+            <img src="{% static 'img/whiteboard-illustration.svg' %}" alt="協作白板插圖" class="img-fluid" style="max-height: 250px;">
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-users fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title text-center">即時協作</h5>
+                <p class="card-text">與團隊成員即時共享和編輯同一張白板，無縫協作，激發創意與效率。</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-paint-brush fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title text-center">多功能繪圖工具</h5>
+                <p class="card-text">使用筆畫、文字、圖形和嵌入影像等多種工具，自由表達您的想法。</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-video fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title text-center">錄製與分享</h5>
+                <p class="card-text">錄製白板操作過程，輕鬆分享給未能參與即時協作的團隊成員。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="mb-4">提升您的團隊協作效率</h3>
+                <p class="lead">我們的白板工具專為現代工作團隊設計，讓遠距協作變得簡單而有效。</p>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'users:register' %}" class="btn btn-primary mt-3">立即開始使用</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

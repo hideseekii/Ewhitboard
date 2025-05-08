@@ -40,20 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 自定義應用
+    
     'users',
-    #'projects',
-    #'boards',
+    'projects',
+    'boards',
     
 ]
 
-# 媒體文件配置
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-# 登入/登出重定向
-LOGIN_REDIRECT_URL = 'users:profile'
-LOGIN_URL = 'users:login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,7 +63,7 @@ ROOT_URLCONF = 'ewhiteboard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # 這應該指向你的模板根目錄
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,10 +87,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # 登入/登出重定向
 LOGIN_REDIRECT_URL = 'users:profile'
-LOGIN_URL = 'users:login'# 靜態文件設置
+LOGIN_URL = 'users:login'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # 這裡修改為項目目錄下的static
+    os.path.join(BASE_DIR, 'static'),  
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

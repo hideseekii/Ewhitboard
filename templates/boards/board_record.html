@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}白板錄製 - {{ board.title }} - 協作白板{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title"><i class="fas fa-video me-2"></i>白板錄製</h2>
+                    <p class="card-subtitle mb-0">白板: {{ board.title }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>您可以通過白板介面上的錄製按鈕錄製白板操作，錄製完成後會自動保存。
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'boards:detail' board.pk %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>返回白板
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0"><i class="fas fa-history me-2"></i>歷史錄製記錄</h3>
+                </div>
+                <div class="card-body">
+                    {% if recordings %}
+                        <div class="list-group">
+                            {% for recording in recordings %}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">錄製 #{{ recording.id }}</h5>
+                                        <small>{{ recording.recorded_at|date:"Y-m-d H:i" }}</small>
+                                    </div>
+                                    <p class="mb-1">
+                                        <a href="{{ recording.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                            <i class="fas fa-play me-1"></i>播放
+                                        </a>
+                                        <a href="{{ recording.file.url }}" class="btn btn-sm btn-outline-secondary" download>
+                                            <i class="fas fa-download me-1"></i>下載
+                                        </a>
+                                    </p>
+                                    <small>由 {{ recording.recorded_by.username }} 錄製</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-center text-muted py-3">尚無錄製記錄</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

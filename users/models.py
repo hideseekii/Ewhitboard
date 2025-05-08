@@ -7,10 +7,6 @@ from django.dispatch import receiver
 User = get_user_model()
 
 class Profile(models.Model):
-    """
-    使用者個人資料擴充模型，可儲存額外資訊如大頭貼、個人簡介等。
-    並透過 is_registered 欄位標示是否已完成註冊並可參與專案。
-    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     avatar = models.ImageField("大頭貼", upload_to='avatars/', blank=True, null=True)
     bio = models.TextField("個人簡介", blank=True)
@@ -21,9 +17,6 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    """
-    當使用者建立或更新時，同步建立或更新 Profile。
-    """
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()

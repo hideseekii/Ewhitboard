@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}我的專案 - 協作白板{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="fas fa-project-diagram me-2"></i>我的專案</h1>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <p class="lead">這裡列出了您擁有的以及參與協作的所有專案</p>
+        <a href="{% url 'projects:create' %}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>創建新專案
+        </a>
+    </div>
+    
+    {% if owned_projects %}
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0"><i class="fas fa-crown me-2"></i>我擁有的專案</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for project in owned_projects %}
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ project.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">創建於 {{ project.created_at|date:"Y-m-d H:i" }}</h6>
+                            <p class="card-text">{{ project.description|truncatechars:100 }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'projects:detail' project.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>查看
+                            </a>
+                            <a href="{% url 'projects:edit' project.pk %}" class="btn btn-sm btn-outline-secondary ms-1">
+                                <i class="fas fa-edit me-1"></i>編輯
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if collaborated_projects %}
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h3 class="card-title mb-0"><i class="fas fa-users me-2"></i>我參與的專案</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for project in collaborated_projects %}
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ project.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                擁有者: {{ project.owner.username }}
+                            </h6>
+                            <p class="card-text">{{ project.description|truncatechars:100 }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'projects:detail' project.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>查看
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if not owned_projects and not collaborated_projects %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <h3 class="text-muted mb-4"><i class="fas fa-folder-open fa-3x mb-3 d-block"></i>您還沒有任何專案</h3>
+            <p>點擊上方的"創建新專案"按鈕開始您的協作之旅</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

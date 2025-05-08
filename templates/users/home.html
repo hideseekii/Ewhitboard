@@ -15,10 +15,10 @@
                 {% if user.profile.is_registered %}
                     <p>您已經完成註冊流程，可以開始使用所有功能。</p>
                     <div class="mt-4">
-                        <a class="btn btn-primary btn-lg" href="#">
+                        <a class="btn btn-primary btn-lg" href="{% url 'projects:list' %}">
                             <i class="fas fa-project-diagram me-2"></i>我的專案
                         </a>
-                        <a class="btn btn-outline-primary btn-lg ms-2" href="#">
+                        <a class="btn btn-outline-primary btn-lg ms-2" href="{% url 'projects:create' %}">
                             <i class="fas fa-plus-circle me-2"></i>新增專案
                         </a>
                     </div>

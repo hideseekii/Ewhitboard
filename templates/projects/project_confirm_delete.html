@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}刪除專案 - 協作白板{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="card-title"><i class="fas fa-exclamation-triangle me-2"></i>確認刪除</h2>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-4">您確定要刪除專案 "{{ project.name }}" 嗎？</h4>
+                    <p class="text-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>此操作不可撤銷，專案的所有白板、資料和協作關係都將永久刪除！
+                    </p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'projects:detail' project.pk %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>取消
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-2"></i>確認刪除
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

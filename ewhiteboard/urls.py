@@ -23,8 +23,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
-    #path('projects/', include('projects.urls')),
-    #path('boards/', include('boards.urls')),
+    path('projects/', include('projects.urls')),
+    path('boards/', include('boards.urls')),
 ]
 
 # 開發環境中處理媒體文件

@@ -1,87 +1,170 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% load static %}
 
 {% block title %}個人資料 - 協作白板{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 解決佈局問題的關鍵 CSS */
+    .profile-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    .profile-sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    .profile-main-card {
+        margin-bottom: 15px;
+    }
+    
+    .user-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 0 10px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #3498db;
+        margin: 0;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+        color: #666;
+        margin: 0;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 15px;
+    }
+    
+    .action-buttons .btn {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="col-md-4 profile-section">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title"><i class="fas fa-user-circle me-2"></i>{{ user.username }} 的個人資料</h3>
-            </div>
-            <div class="card-body text-center">
-                {% if user.profile.avatar %}
-                    <img class="rounded-circle profile-img mb-3" width="150" height="150" src="{{ user.profile.avatar.url }}" alt="Profile Picture">
-                {% else %}
-                    <img class="rounded-circle profile-img mb-3" width="150" height="150" src="{% static 'img/default-avatar.png' %}" alt="Default Profile Picture">
-                {% endif %}
-                <h4 class="profile-info">{{ user.username }}</h4>
-                <p class="text-muted">{{ user.email }}</p>
-                
-                {% if user.profile.bio %}
-                    <div class="profile-bio">
-                        <h5><i class="fas fa-quote-left me-2 text-primary"></i>關於我</h5>
-                        <p>{{ user.profile.bio }}</p>
-                    </div>
-                {% endif %}
-                
-                {% if not is_registered %}
-                    <div class="alert alert-warning mt-3">
-                        <p><i class="fas fa-exclamation-triangle me-2"></i>您尚未完成註冊流程，無法參與專案。</p>
-                        <a href="{% url 'users:complete_registration' %}" class="btn btn-warning btn-sm mt-2">
-                            <i class="fas fa-user-check me-2"></i>完成註冊
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="alert alert-success mt-3">
-                        <span class="badge-registered mb-2"><i class="fas fa-check-circle me-2"></i>已完成註冊</span>
-                        <p class="mb-0">您已完成註冊，可以參與專案。</p>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        
-        {% if is_registered %}
-        <div class="card mt-4">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title"><i class="fas fa-chart-pie me-2"></i>活動統計</h3>
-            </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-6">
-                        <h4>{{ user.owned_projects.count }}</h4>
-                        <p class="text-muted">我的專案</p>
-                    </div>
-                    <div class="col-6">
-                        <h4>{{ user.projects.count }}</h4>
-                        <p class="text-muted">協作專案</p>
-                    </div>
+    <!-- 左側個人資料與操作區 -->
+    <div class="col-md-4">
+        <div class="profile-container">
+            <!-- 個人資料卡片 -->
+            <div class="card profile-main-card">
+                <div class="card-body text-center">
+                    {% if user.profile.avatar %}
+                        <img class="rounded-circle mb-3" width="100" height="100" src="{{ user.profile.avatar.url }}" alt="頭像">
+                    {% else %}
+                        <img class="rounded-circle mb-3" width="100" height="100" src="{% static 'img/default-avatar.png' %}" alt="默認頭像">
+                    {% endif %}
+                    
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted small">{{ user.email }}</p>
+                    
+                    {% if user.profile.bio %}
+                        <p class="small text-muted mb-0">{{ user.profile.bio }}</p>
+                    {% endif %}
+                    
+                    <!-- 註冊狀態顯示 -->
+                    {% if not is_registered %}
+                        <div class="alert alert-warning py-2 mt-3 mb-0">
+                            您尚未完成註冊
+                            <a href="{% url 'users:complete_registration' %}" class="btn btn-warning btn-sm d-block mt-1">完成註冊</a>
+                        </div>
+                    {% else %}
+                        <div class="mt-2">
+                            <span class="badge bg-success py-1 px-2"><i class="fas fa-check-circle me-1"></i>已完成註冊</span>
+                        </div>
+                        
+                        <!-- 活動統計 -->
+                        <div class="user-stats">
+                            <div class="stat-item">
+                                <p class="stat-number">{{ user.owned_projects.count }}</p>
+                                <p class="stat-label">我的專案</p>
+                            </div>
+                            <div class="stat-item">
+                                <p class="stat-number">{{ user.projects.count }}</p>
+                                <p class="stat-label">協作專案</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 專案按鈕 -->
+                        <div class="action-buttons">
+                            <a href="{% url 'projects:create' %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus-circle me-1"></i>新增專案
+                            </a>
+                            <a href="{% url 'projects:list' %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-list me-1"></i>所有專案
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- 登出按鈕 -->
+                    <hr>
+                    <form method="POST" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-sign-out-alt me-1"></i>登出系統
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
     
+    <!-- 右側編輯表單 -->
     <div class="col-md-8">
-        <div class="card profile-form">
+        <div class="card">
             <div class="card-header bg-primary text-white">
                 <h3 class="card-title"><i class="fas fa-edit me-2"></i>編輯個人資料</h3>
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <fieldset class="form-group">
-                        <legend>帳號資訊</legend>
-                        {{ u_form.as_p }}
-                    </fieldset>
                     
-                    <fieldset class="form-group mt-4">
-                        <legend>個人檔案</legend>
-                        {{ p_form.as_p }}
-                    </fieldset>
+                    <h5 class="mb-3">帳號資訊</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">使用者名稱</label>
+                            {{ u_form.username }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">電子郵件</label>
+                            {{ u_form.email }}
+                        </div>
+                    </div>
                     
-                    <div class="form-group text-center mt-4">
+                    <h5 class="mb-3">個人檔案</h5>
+                    <div class="mb-3">
+                        <label class="form-label">大頭貼</label>
+                        {{ p_form.avatar }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">個人簡介</label>
+                        {{ p_form.bio }}
+                    </div>
+                    
+                    <div class="text-center mt-4">
                         <button class="btn btn-primary" type="submit">
                             <i class="fas fa-save me-2"></i>更新資料
                         </button>

@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='users:login'), name='logout'),
+    path('logout/', views.custom_logout, name='logout'),  # 使用自定義登出視圖
     path('profile/', views.profile, name='profile'),
     path('complete-registration/', views.complete_registration, name='complete_registration'),
 ]

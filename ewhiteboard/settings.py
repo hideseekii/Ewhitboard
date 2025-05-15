@@ -76,6 +76,9 @@ TEMPLATES = [
     },
 ]
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 默認關閉瀏覽器後結束會話
+SESSION_COOKIE_AGE = 60  # 如果勾選「記住我」，會話將持續 2 週
+
 
 
 # 媒體文件配置

@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 def home(request):
@@ -49,4 +50,13 @@ def complete_registration(request):
         profile.save()
         messages.success(request, '註冊完成！您現在可以參與專案了。')
         return redirect('users:profile')
-    return render(request, 'users/complete_registration.html')  
+    return render(request, 'users/complete_registration.html')
+
+def custom_logout(request):
+    """自定義登出視圖，支持 POST 請求並添加成功訊息"""
+    if request.method == 'POST':
+        logout(request)
+        messages.success(request, '您已成功登出系統！')
+        return redirect('users:home')
+    # 如果是 GET 請求，重定向到首頁
+    return redirect('users:home')

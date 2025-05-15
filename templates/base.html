@@ -17,14 +17,72 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <!-- 導航欄內容 -->
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'users:home' %}">協作白板</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'users:home' %}">
+                            <i class="fas fa-home me-1"></i>首頁
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/projects/' in request.path %}active{% endif %}" href="{% url 'projects:list' %}">
+                            <i class="fas fa-project-diagram me-1"></i>我的專案
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i>{{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item {% if '/profile/' in request.path %}active{% endif %}" href="{% url 'users:profile' %}">
+                                        <i class="fas fa-id-card me-2"></i>個人資料
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{% url 'users:logout' %}" class="m-0 p-0">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-sign-out-alt me-2"></i>登出
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if '/login/' in request.path %}active{% endif %}" href="{% url 'users:login' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i>登入
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if '/register/' in request.path %}active{% endif %}" href="{% url 'users:register' %}">
+                                <i class="fas fa-user-plus me-1"></i>註冊
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
     </nav>
     
     <main class="container mt-4 fade-in">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
                     {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -32,12 +90,33 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <!-- 頁腳內容 -->
+    <footer class="text-center py-4 mt-5 bg-dark text-white">
+        <div class="container">
+            <p>&copy; {% now "Y" %} 協作白板系統 - 保留所有權利</p>
+            <p class="mb-0"><small>為您的團隊提供最好的協作體驗</small></p>
+        </div>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 登出確認 JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 獲取所有登出表單
+            const logoutForms = document.querySelectorAll('form[action="{% url 'users:logout' %}"]');
+            
+            // 為每個表單添加提交事件
+            logoutForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    if (!confirm('確定要登出嗎？')) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>

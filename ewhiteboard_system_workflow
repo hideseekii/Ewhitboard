@@ -1,0 +1,27 @@
+digraph "eWhiteboard System Workflow" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="eWhiteboard System Workflow" nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	"91029e8c2218483897460bef41297ba3" [label=User height=1.9 image="C:\Users\yubin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\resources/onprem/client\user.png" shape=none]
+	a7c88e3e144146b3b788eca1470a73ce [label=Browser height=1.9 image="C:\Users\yubin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\resources/onprem/network\internet.png" shape=none]
+	subgraph "cluster_Docker Host" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Docker Host" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		b83e63c0911f4c35b418faf4d572c856 [label="Nginx Proxy" height=1.9 image="C:\Users\yubin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\resources/aws/network\elastic-load-balancing.png" shape=none]
+		subgraph "cluster_App Layer" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="App Layer" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			"705290b1d2cc4b3e89496e0dd1c09247" [label="Django API" height=1.9 image="C:\Users\yubin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\resources/aws/network\api-gateway.png" shape=none]
+			"49a919e373ac416fb2fe502fba63fb28" [label="Django App" height=1.9 image="C:\Users\yubin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\resources/aws/compute\elastic-container-service.png" shape=none]
+		}
+		"4becd7b977434e93a1ad73baa737897f" [label="Amazon RDS
+(PostgreSQL)" height=2.3 image="C:\Users\yubin\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\resources/aws/database\rds.png" shape=none]
+	}
+	"91029e8c2218483897460bef41297ba3" -> a7c88e3e144146b3b788eca1470a73ce [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	a7c88e3e144146b3b788eca1470a73ce -> b83e63c0911f4c35b418faf4d572c856 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	b83e63c0911f4c35b418faf4d572c856 -> "705290b1d2cc4b3e89496e0dd1c09247" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"705290b1d2cc4b3e89496e0dd1c09247" -> "49a919e373ac416fb2fe502fba63fb28" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"49a919e373ac416fb2fe502fba63fb28" -> "4becd7b977434e93a1ad73baa737897f" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"4becd7b977434e93a1ad73baa737897f" -> "49a919e373ac416fb2fe502fba63fb28" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"49a919e373ac416fb2fe502fba63fb28" -> b83e63c0911f4c35b418faf4d572c856 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	b83e63c0911f4c35b418faf4d572c856 -> a7c88e3e144146b3b788eca1470a73ce [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	a7c88e3e144146b3b788eca1470a73ce -> "91029e8c2218483897460bef41297ba3" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+}
